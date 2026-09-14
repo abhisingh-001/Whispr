@@ -20,9 +20,18 @@
         <img src="/assets/logo.svg" alt="Whispr" />
         <span class="brand-word">Whispr</span>
       </div>
-      <div style="display:flex; gap:8px;">
-        <button class="icon-btn" id="theme-toggle-btn" title="Toggle dark / light mode">🌙</button>
+      
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="avatar" id="my-avatar" style="width:34px;height:34px;font-size:14px; cursor:pointer;" title="Your Profile"></div>
+        
+        <div style="display:none;">
+          <div id="my-name"></div>
+          <div id="my-username"></div>
+          <button id="theme-toggle-btn"></button>
+        </div>
+
         <button class="icon-btn" id="new-chat-btn" title="New conversation">✏️</button>
+        <button class="icon-btn" id="settings-btn" title="Settings">⚙️</button>
       </div>
     </div>
 
@@ -43,14 +52,7 @@
 
     <div class="chat-list" id="chat-list"></div>
 
-    <div class="sidebar-footer">
-      <div class="avatar" id="my-avatar" style="width:38px;height:38px;font-size:14px; cursor:pointer;"></div>
-      <div class="who">
-        <div class="name" id="my-name"></div>
-        <div class="tag" id="my-username"></div>
-      </div>
-      <button class="icon-btn" id="settings-btn" title="Settings">⚙️</button>
-    </div>
+    
   </aside>
 
   <!-- ================= MAIN CHAT PANE ================= -->
