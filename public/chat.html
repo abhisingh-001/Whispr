@@ -226,15 +226,19 @@
     <div class="settings-section">
       <h3>Profile</h3>
       
-      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; background: rgba(255, 255, 255, 0.05); padding: 16px; border-radius: 12px;">
-        <div class="profile-pic-preview avatar" id="settings-pic-preview" style="width:76px;height:76px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"></div>
+      
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; background: rgba(128, 128, 128, 0.1); padding: 16px; border-radius: 12px;">
+        <div class="profile-pic-preview avatar" id="settings-pic-preview" style="width:76px;height:76px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
         
         <div style="display: flex; flex-direction: column; gap: 4px;">
-          <div id="settings-name-display" style="font-size: 18px; font-weight: bold; color: #fff; letter-spacing: 0.5px;">Your Name</div>
-          <div id="settings-username-display" style="font-size: 14px; color: #aaa;">@username</div>
+          
+          <div id="settings-name-display" style="font-size: 18px; font-weight: bold; letter-spacing: 0.5px;">Your Name</div>
+          
+          <div id="settings-username-display" style="font-size: 14px; opacity: 0.6;">@username</div>
         </div>
       </div>
 
+     
       <div class="profile-pic-actions" style="display: flex; gap: 10px;">
         <label class="btn btn-ghost btn-sm" for="avatar-file-input">Change picture</label>
         <input type="file" id="avatar-file-input" accept="image/png,image/jpeg,image/webp,image/gif" />
