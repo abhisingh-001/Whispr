@@ -87,8 +87,17 @@
     const user = getUser();
     if (!user) return;
 
+    
     paintAvatar(document.getElementById('settings-pic-preview'), { name: user.fullName, color: user.avatarColor, image: user.avatarImage });
 
+   
+    const nameDisplay = document.getElementById('settings-name-display');
+    if (nameDisplay) nameDisplay.textContent = user.fullName;
+
+    const usernameDisplay = document.getElementById('settings-username-display');
+    if (usernameDisplay) usernameDisplay.textContent = "@" + user.username;
+
+    
     document.getElementById('avatar-file-input')?.addEventListener('change', (e) => {
       handleAvatarFile(e.target.files[0]);
       e.target.value = '';
@@ -96,6 +105,7 @@
     document.getElementById('remove-avatar-btn')?.addEventListener('click', removeAvatar);
   });
 
+  
   window.Whispr = window.Whispr || {};
   Object.assign(window.Whispr, { fileToResizedDataUrl, ALLOWED_AVATAR_TYPES: ALLOWED_TYPES });
 })();
