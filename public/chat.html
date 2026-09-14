@@ -74,7 +74,14 @@
       </div>
     </div>
 
-    <div id="active-chat" style="display:none; flex-direction:column; height:100%;">
+    <div id="active-chat" style="display:none; flex-direction:column; height:100%; position: relative;">
+      
+      <!-- 🔥 EKDUM HALKA BACKGROUND WATERMARK 🔥 -->
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; user-select: none; opacity: 0.04; text-align: center; width: 100%; z-index: 0;">
+        <img src="/assets/logo.svg" style="width: 64px; margin-bottom: 12px;" alt="" />
+        <h2 style="font-size: 32px; margin: 0; font-weight: bold; letter-spacing: 2px;">Whispr</h2>
+        <p style="font-size: 14px; margin-top: 8px;">&copy; 2026 &middot; Crafted with ❤️ by Abhishek Singh</p>
+      </div>
       <div class="chat-header">
         <button class="icon-btn" id="back-btn" style="display:none;">←</button>
         <div class="avatar" id="header-avatar" style="width:38px;height:38px;font-size:14px; cursor:pointer;"></div>
