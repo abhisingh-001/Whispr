@@ -1,0 +1,25 @@
+{
+  "name": "whispr-chat",
+  "version": "1.0.0",
+  "description": "Whispr - a real-time chat application with end-to-end style Secure Messages, self-destruct timers, pinned messages, chat analytics, translation and smart replies.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "keywords": ["chat", "socket.io", "mongodb", "express", "jwt", "aes-256-gcm"],
+  "author": "Abhishek Singh",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.0",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

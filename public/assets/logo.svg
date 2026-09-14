@@ -1,0 +1,11 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Whispr logo">
+  <defs>
+    <linearGradient id="whisprGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6C8CFF"/>
+      <stop offset="100%" stop-color="#F2B84B"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 6C16.54 6 4 16.75 4 30c0 7.06 3.55 13.4 9.2 17.8-.4 3.2-1.7 6.4-3.9 9.2 4.5-.4 8.9-2 12.6-4.6 3.1.9 6.5 1.4 10.1 1.4 15.46 0 28-10.75 28-24S47.46 6 32 6z" fill="url(#whisprGrad)"/>
+  <circle cx="32" cy="29" r="6.4" fill="#12172B"/>
+  <rect x="29.4" y="33" width="5.2" height="8" rx="1.6" fill="#12172B"/>
+</svg>

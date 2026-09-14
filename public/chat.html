@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Whispr</title>
+<link rel="icon" href="/assets/logo.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <img src="/assets/logo.svg" alt="Whispr" />
+        <span class="brand-word">Whispr</span>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="icon-btn" id="theme-toggle-btn" title="Toggle dark / light mode">🌙</button>
+        <button class="icon-btn" id="new-chat-btn" title="New conversation">✏️</button>
+      </div>
+    </div>
+
+    <div class="search-box">
+  
+      <input type="text" tabindex="-1" style="width: 0; height: 0; opacity: 0; position: absolute; z-index: -1;" aria-hidden="true" />
+      
+      
+      <input type="search" id="chat-search" placeholder="Search chats..." autocomplete="off" name="whispr-secure-search" />
+    </div>
+
+    <div class="filter-tabs" id="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="unread">Unread</button>
+      <button class="filter-tab" data-filter="groups">Groups</button>
+      <button class="filter-tab" data-filter="secure">🔒 Secure</button>
+    </div>
+
+    <div class="chat-list" id="chat-list"></div>
+
+    <div class="sidebar-footer">
+      <div class="avatar" id="my-avatar" style="width:38px;height:38px;font-size:14px; cursor:pointer;"></div>
+      <div class="who">
+        <div class="name" id="my-name"></div>
+        <div class="tag" id="my-username"></div>
+      </div>
+      <button class="icon-btn" id="settings-btn" title="Settings">⚙️</button>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CHAT PANE ================= -->
+  <main class="main-pane">
+
+    <div id="no-chat-selected" class="messages">
+      <div class="empty-state">
+        <img src="/assets/logo.svg" alt="" />
+        <h3>Pick a conversation</h3>
+        <p>Choose a chat from the left, or start a new one with the ✏️ button.</p>
+        <p style="margin-top:10px; font-size:12.5px;">Your conversations are private and secure. 🔐</p>
+      </div>
+    </div>
+
+    <div id="active-chat" style="display:none; flex-direction:column; height:100%;">
+      <div class="chat-header">
+        <button class="icon-btn" id="back-btn" style="display:none;">←</button>
+        <div class="avatar" id="header-avatar" style="width:38px;height:38px;font-size:14px; cursor:pointer;"></div>
+        <div class="info" id="header-info" style="cursor:pointer;">
+          <div class="name" id="header-name"></div>
+          <div class="status" id="header-status"></div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="translate-lang-btn" title="Set translation language">🌐</button>
+        </div>
+      </div>
+
+      <div class="pinned-bar" id="pinned-bar"></div>
+
+      <div class="messages" id="messages"></div>
+      <div class="smart-replies" id="smart-replies"></div>
+
+      <div class="composer">
+        <div class="reply-bar" id="reply-bar">
+          <div class="reply-body">
+            <div class="reply-label" id="reply-label"></div>
+            <div class="reply-text" id="reply-text"></div>
+          </div>
+          <button id="cancel-reply-btn" aria-label="Cancel reply">✕</button>
+        </div>
+
+        <div class="composer-options">
+          <label class="toggle">
+            <input type="checkbox" id="secure-toggle" />
+            <span class="switch"></span>
+            🔐 Secure Message
+          </label>
+
+          <select class="destruct-select" id="destruct-select" style="display:none;">
+            <option value="">No self-destruct</option>
+            <option value="30">Delete 30s after unlock</option>
+            <option value="60">Delete 1 min after unlock</option>
+            <option value="300">Delete 5 min after unlock</option>
+          </select>
+        </div>
+        <div class="composer-row">
+          <textarea id="message-input" rows="1" placeholder="Type a message..."></textarea>
+          <button class="send-btn" id="send-btn">➤</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modern Site Footer -->
+<footer class="site-footer">
+    <p>&copy; 2026 <strong>Whispr</strong> <span class="dot">&middot;</span> Crafted with <span class="heart">❤️</span> by <a href="#" class="dev-name" title="Connect with the Developer">Abhishek Singh</a></p>
+</footer>
+
+<!-- ================= MESSAGE CONTEXT MENU ================= -->
+<div class="context-menu" id="context-menu">
+  <button data-action="reply">↩ Reply</button>
+  <button data-action="forward">↗ Forward</button>
+  <button data-action="copy">📋 Copy</button>
+  <button data-action="pin">📌 Pin / Unpin</button>
+  <button data-action="secure">🔐 Make Secure</button>
+  <button data-action="delete" class="danger">🗑 Delete</button>
+</div>
+
+<!-- ================= FORWARD MODAL ================= -->
+<div class="overlay hidden" id="forward-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="forward-overlay" aria-label="Close">✕</button>
+    <h2>↗ Forward message</h2>
+    <p class="sub">Choose a chat to forward this message to.</p>
+    <div class="new-chat-list" id="forward-chat-list"></div>
+  </div>
+</div>
+
+<!-- ================= NEW CHAT MODAL ================= -->
+<div class="overlay hidden" id="new-chat-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="new-chat-overlay" aria-label="Close">✕</button>
+    <h2>Start a conversation</h2>
+    <p class="sub">Search by name or @username to find people on Whispr.</p>
+    <div class="field">
+      <div class="search-input-wrap">
+        <input type="text" id="new-chat-search" placeholder="Search by name or @username..." />
+        <button class="icon-btn search-icon-btn" id="new-chat-search-btn" title="Search" aria-label="Search">🔍</button>
+      </div>
+    </div>
+    <div class="new-chat-list" id="new-chat-list"></div>
+    <button class="btn btn-ghost btn-block" id="open-group-btn" style="margin-top:14px;">👥 Create a group instead</button>
+  </div>
+</div>
+
+<!-- ================= NEW GROUP MODAL ================= -->
+<div class="overlay hidden" id="new-group-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="new-group-overlay" aria-label="Close">✕</button>
+    <h2>Create a group</h2>
+    <div class="field">
+      <label>Group name</label>
+      <input type="text" id="group-name-input" placeholder="e.g. Project Squad" />
+    </div>
+    <p class="sub">Select members</p>
+    <div class="new-chat-list" id="group-member-list"></div>
+    <button class="btn btn-primary btn-block" id="create-group-btn" style="margin-top:14px;">Create group</button>
+  </div>
+</div>
+
+<!-- ================= GROUP INFO / ADMIN MODAL ================= -->
+<div class="overlay hidden" id="group-info-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="group-info-overlay" aria-label="Close">✕</button>
+    <div class="profile-pic-row">
+      <div class="profile-pic-preview avatar" id="group-pic-preview" style="width:76px;height:76px;"></div>
+      <div class="profile-pic-actions" id="group-pic-actions">
+        <label class="btn btn-ghost btn-sm" for="group-pic-input">Change picture</label>
+        <input type="file" id="group-pic-input" accept="image/png,image/jpeg,image/webp,image/gif" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Group name</label>
+      <input type="text" id="group-rename-input" />
+    </div>
+    <button class="btn btn-ghost btn-block" id="group-rename-save-btn" style="margin-bottom:16px;">Save name</button>
+
+    <div class="settings-row" id="announcement-row">
+      <span>📢 Only admins can send messages</span>
+      <label class="toggle"><input type="checkbox" id="announcement-toggle" /><span class="switch"></span></label>
+    </div>
+
+    <p class="sub" style="margin-top:16px;">Members</p>
+    <div class="new-chat-list" id="group-members-admin-list"></div>
+
+    <p class="sub" style="margin-top:16px;">Add member</p>
+    <div class="field"><input type="text" id="group-add-member-search" placeholder="Search by name or @username..." /></div>
+    <div class="new-chat-list" id="group-add-member-list"></div>
+  </div>
+</div>
+
+<!-- ================= SETTINGS MODAL ================= -->
+<div class="overlay hidden" id="settings-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="settings-overlay" aria-label="Close">✕</button>
+    <h2>Settings</h2>
+    <p class="sub">Manage your profile, appearance and security.</p>
+
+    <div class="settings-section">
+      <h3>Profile picture</h3>
+      <div class="profile-pic-row">
+        <div class="profile-pic-preview avatar" id="settings-pic-preview" style="width:76px;height:76px;"></div>
+        <div class="profile-pic-actions">
+          <label class="btn btn-ghost btn-sm" for="avatar-file-input">Change picture</label>
+          <input type="file" id="avatar-file-input" accept="image/png,image/jpeg,image/webp,image/gif" />
+          <button class="btn btn-ghost btn-sm" id="remove-avatar-btn">Remove picture</button>
+        </div>
+      </div>
+      <div class="avatar-error" id="avatar-error"></div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Appearance</h3>
+      <div class="settings-row">
+        <span>Dark / light mode</span>
+        <button class="icon-btn theme-icon-btn" id="settings-theme-btn" title="Toggle dark / light mode" aria-label="Toggle dark / light mode">🌙</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Activity</h3>
+      <div class="settings-row">
+        <span>📊 Chat Analytics</span>
+        <button class="btn btn-ghost btn-sm" id="open-analytics-btn">View</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Security</h3>
+      <div class="settings-row">
+        <span id="pin-status-label">Secure Message PIN: not set</span>
+        <button class="btn btn-secure btn-sm" id="open-pin-setup-btn">Set / Change PIN</button>
+      </div>
+      <div class="settings-row">
+        <span>How Secure Message works</span>
+        <button class="btn btn-ghost btn-sm" id="open-howto-btn">How to use</button>
+      </div>
+      <div class="settings-row" id="vault-row" style="cursor:pointer;">
+        <span>🔒 Secure PIN Vault</span>
+        <button class="btn btn-ghost btn-sm" id="open-vault-btn">Unlock</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Account</h3>
+      <div class="settings-row">
+        <span>Log out of Whispr</span>
+        <button class="btn btn-danger btn-sm" id="logout-btn">Log out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PIN SETUP MODAL ================= -->
+<div class="overlay hidden" id="pin-setup-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="pin-setup-overlay" aria-label="Close">✕</button>
+    <h2>🔐 Secure Message PIN</h2>
+    <p class="sub">This PIN locks and unlocks Secure Messages sent to you. Anyone you message needs you to have a PIN set before they can send you one.</p>
+    <div class="field">
+      <label>Choose a 4-6 digit PIN</label>
+      <input type="password" inputmode="numeric" maxlength="6" id="pin-setup-input" class="pin-input" placeholder="••••••" />
+    </div>
+    <div class="field">
+      <label>Account password (optional — enables the Secure PIN Vault so you can recover this PIN later)</label>
+      <input type="password" id="pin-setup-account-password" placeholder="Your Whispr login password" />
+    </div>
+    <div class="pin-feedback" id="pin-setup-feedback"></div>
+    <button class="btn btn-ghost btn-block" id="generate-pin-btn" style="margin-bottom:10px;">🎲 Generate a random PIN for me</button>
+    <button class="btn btn-secure btn-block" id="save-pin-btn">Save PIN</button>
+  </div>
+</div>
+
+<!-- ================= UNLOCK MODAL ================= -->
+<div class="overlay hidden" id="unlock-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="unlock-overlay" aria-label="Close">✕</button>
+    <h2>🔒 Enter PIN</h2>
+    <p class="sub">Enter your Secure Message PIN to reveal this message.</p>
+    <input type="password" inputmode="numeric" maxlength="6" id="unlock-pin-input" class="pin-input" placeholder="••••••" />
+    <div class="pin-feedback" id="unlock-feedback"></div>
+    <button class="btn btn-secure btn-block" id="unlock-submit-btn">Unlock</button>
+  </div>
+</div>
+
+<!-- ================= SECURE PIN VAULT MODAL ================= -->
+<div class="overlay hidden" id="vault-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="vault-overlay" aria-label="Close">✕</button>
+    <h2>🔒 Secure PIN Vault</h2>
+    <p class="sub">Enter your account password to reveal your Secure Message PIN.</p>
+    <div class="field">
+      <label>Account password</label>
+      <input type="password" id="vault-password-input" placeholder="Your Whispr login password" />
+    </div>
+    <div class="pin-feedback" id="vault-feedback"></div>
+    <button class="btn btn-secure btn-block" id="vault-unlock-btn">Unlock vault</button>
+    <div class="vault-display" id="vault-display" style="display:none;"></div>
+    <button class="btn btn-ghost btn-block" id="vault-lock-btn" style="display:none; margin-top:10px;">Hide PIN</button>
+  </div>
+</div>
+
+<!-- ================= HOW TO USE MODAL ================= -->
+<div class="overlay hidden" id="howto-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="howto-overlay" aria-label="Close">✕</button>
+    <h2>🔐 How Secure Message works</h2>
+    <ol class="howto-steps">
+      <li>Go to <strong>Settings → Security</strong> and set a 4-6 digit PIN. This only has to be done once.</li>
+      <li>While typing a message, switch on <strong>🔐 Secure Message</strong> before hitting send.</li>
+      <li>Optionally choose a self-destruct timer — it starts only after the message is unlocked.</li>
+      <li>Your recipient sees a garbled 🔒 preview instead of your words.</li>
+      <li>They tap the bubble and enter <em>their own</em> PIN to reveal it.</li>
+      <li>A wrong PIN never shows a hint — it always looks the same, no matter how many attempts.</li>
+      <li>Nobody, including the app's own database, ever stores your PIN or the original text.</li>
+      <li>Optionally save your account password when setting a PIN to enable the <strong>Secure PIN Vault</strong> — a password-protected way to look your PIN up again if you forget it.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ================= ANALYTICS MODAL ================= -->
+<div class="overlay hidden" id="analytics-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="analytics-overlay" aria-label="Close">✕</button>
+    <h2>📊 Your Chat Activity</h2>
+    <div class="analytics-grid" id="analytics-grid">
+      <div class="analytics-card"><div class="num" id="an-sent">–</div><div class="label">Messages Sent</div></div>
+      <div class="analytics-card"><div class="num" id="an-received">–</div><div class="label">Messages Received</div></div>
+      <div class="analytics-card"><div class="num" id="an-chats">–</div><div class="label">Active Chats</div></div>
+      <div class="analytics-card"><div class="num" id="an-groups">–</div><div class="label">Groups</div></div>
+      <div class="analytics-card full"><div class="label">Most Active Day</div><div class="num" id="an-day" style="font-size:18px;">–</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= GENERIC CONFIRM MODAL ================= -->
+<div class="overlay hidden" id="confirm-overlay">
+  <div class="modal" style="max-width:340px; text-align:center;">
+    <h2 id="confirm-title">Are you sure?</h2>
+    <p class="sub" id="confirm-message"></p>
+    <div style="display:flex; gap:10px; margin-top:6px;">
+      <button class="btn btn-ghost btn-block" id="confirm-cancel-btn">Cancel</button>
+      <button class="btn btn-danger btn-block" id="confirm-yes-btn">Yes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CONTACT INFO MODAL ================= -->
+<div class="overlay hidden" id="contact-info-overlay">
+  <div class="modal" style="text-align:center;">
+    <button class="icon-btn modal-close" data-close="contact-info-overlay" aria-label="Close">✕</button>
+    <div class="avatar" id="contact-info-avatar" style="width:120px;height:120px;font-size:40px;margin:8px auto 18px;"></div>
+    <h2 id="contact-info-name" style="margin-bottom:4px;"></h2>
+    <p class="sub" id="contact-info-username" style="margin-bottom:6px;"></p>
+    <p class="sub" id="contact-info-status" style="margin-bottom:0;"></p>
+  </div>
+</div>
+
+<!-- ================= TRANSLATE LANGUAGE MODAL ================= -->
+<div class="overlay hidden" id="lang-overlay">
+  <div class="modal">
+    <button class="icon-btn modal-close" data-close="lang-overlay" aria-label="Close">✕</button>
+    <h2>🌐 Translate messages to</h2>
+    <p class="sub">Every message will get a "Translate" link that converts it to this language.</p>
+    <select id="lang-select" class="destruct-select" style="width:100%; padding:12px;">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+      <option value="es">Spanish</option>
+      <option value="fr">French</option>
+      <option value="de">German</option>
+      <option value="bn">Bengali</option>
+      <option value="ta">Tamil</option>
+      <option value="te">Telugu</option>
+      <option value="mr">Marathi</option>
+      <option value="ar">Arabic</option>
+      <option value="zh-CN">Chinese</option>
+      <option value="ja">Japanese</option>
+    </select>
+    <button class="btn btn-primary btn-block" id="save-lang-btn" style="margin-top:14px;">Save</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/theme.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/modal.js"></script>
+<script src="/js/confirm.js"></script>
+<script src="/js/avatar.js"></script>
+<script src="/js/smartReply.js"></script>
+<script src="/js/translate.js"></script>
+<script src="/js/secureMessage.js"></script>
+<script src="/js/vault.js"></script>
+<script src="/js/profile.js"></script>
+<script src="/js/analytics.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/groupAdmin.js"></script>
+</body>
+</html>

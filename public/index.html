@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Whispr — Say it, safely.</title>
+<link rel="icon" href="/assets/logo.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <div class="logo-row">
+        <img src="/assets/logo.svg" alt="Whispr" />
+        <span class="brand-word">Whispr</span>
+      </div>
+
+      <div id="error-box" class="auth-error" style="display:none;"></div>
+
+      <!-- LOGIN FORM -->
+      <div id="login-form">
+        <h1>Welcome back</h1>
+        <p class="sub">Log in to pick up your conversations.</p>
+        <div class="field">
+          <label>Username or Email</label>
+          <input type="text" id="login-identifier" autocomplete="username" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="login-password" autocomplete="current-password" />
+        </div>
+        <button class="btn btn-primary btn-block" id="login-btn">Log in</button>
+        <p class="auth-switch">New to Whispr? <button id="show-register">Create an account</button></p>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="register-form" style="display:none;">
+        <h1>Create your account</h1>
+        <p class="sub">Takes less than a minute.</p>
+        <div class="field">
+          <label>Full name</label>
+          <input type="text" id="reg-fullname" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="reg-username" autocomplete="username" placeholder="e.g. abhishek_singh" />
+          <div class="field-hint">This is your unique @handle on Whispr — like Instagram. 3-20 characters: letters, numbers and underscores only, no spaces.</div>
+          <div class="field-feedback" id="username-feedback"></div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="reg-email" autocomplete="email" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="reg-password" autocomplete="new-password" />
+        </div>
+        <button class="btn btn-primary btn-block" id="register-btn">Create account</button>
+        <p class="auth-switch">Already have an account? <button id="show-login">Log in</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-brand">
+    <svg class="bubbles" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="80" r="70" fill="#6C8CFF22"/>
+      <circle cx="340" cy="120" r="50" fill="#F2B84B22"/>
+      <circle cx="120" cy="330" r="90" fill="#6C8CFF18"/>
+      <circle cx="330" cy="320" r="40" fill="#F2B84B22"/>
+    </svg>
+    <h2 class="wordmark">Say it,<br/>safely.</h2>
+    <p class="tagline">Whispr is real-time messaging with a lock built in — Secure Messages only your recipient's PIN can open, self-destructing notes, pinned reminders and more.</p>
+  </div>
+
+</div>
+
+<script src="/js/theme.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+</body>
+</html>
