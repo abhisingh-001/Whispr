@@ -15,14 +15,18 @@
 
   <!-- ================= SIDEBAR ================= -->
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="brand">
+    <!-- ================= SIDEBAR HEADER ================= -->
+    <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center; overflow: hidden; padding-right: 8px;">
+      
+      <!-- Left Side: Logo -->
+      <div class="brand" style="flex-shrink: 0;">
         <img src="/assets/logo.svg" alt="Whispr" />
         <span class="brand-word">Whispr</span>
       </div>
       
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div class="avatar" id="my-avatar" style="width:34px;height:34px;font-size:14px; cursor:pointer;" title="Your Profile"></div>
+      <!-- Right Side: Avatar + Icons -->
+      <div style="display:flex; align-items:center; gap:10px; flex-shrink: 0;">
+        <div class="avatar" id="my-avatar" style="width:32px;height:32px;font-size:14px; cursor:pointer;" title="Your Profile"></div>
         
         <div style="display:none;">
           <div id="my-name"></div>
@@ -30,15 +34,15 @@
           <button id="theme-toggle-btn"></button>
         </div>
 
-        <button class="icon-btn" id="new-chat-btn" title="New conversation" style="font-size: 24px; font-weight: normal; line-height: 1;">+</button>
-        <button class="icon-btn" id="settings-btn" title="Settings" style="font-size: 20px; font-weight: bold; line-height: 1;">⋮</button>
+        <button class="icon-btn" id="new-chat-btn" title="New conversation" style="font-size: 24px; font-weight: normal; line-height: 1; padding: 4px 6px;">+</button>
+        <button class="icon-btn" id="settings-btn" title="Settings" style="font-size: 20px; font-weight: bold; line-height: 1; padding: 4px 6px;">⋮</button>
       </div>
 
+    </div> <!-- YAHAN HEADER PROPERLY CLOSE HO GAYA -->
+
+    <!-- ================= SEARCH BOX ================= -->
     <div class="search-box">
-  
       <input type="text" tabindex="-1" style="width: 0; height: 0; opacity: 0; position: absolute; z-index: -1;" aria-hidden="true" />
-      
-      
       <input type="search" id="chat-search" placeholder="Search chats..." autocomplete="off" name="whispr-secure-search" />
     </div>
 
