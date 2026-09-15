@@ -575,3 +575,16 @@ select.destruct-select{
     transform: scaleX(1);
     transform-origin: bottom left;
 }
+
+.brand-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  font-style: italic;
+  color: #6C8CFF; 
+  letter-spacing: 1.5px;
+  text-align: center; 
+  margin-top: -8px; 
+  margin-bottom: 24px; 
+  opacity: 0.9;
+}
