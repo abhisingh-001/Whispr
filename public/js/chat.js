@@ -816,8 +816,17 @@
       // it. renderIfNew() checks the DOM either way, so exactly one copy
       // ever gets appended no matter which path wins the race.
       renderIfNew(message, true);
-      const chat = chats.find((c) => String(c._id) === String(activeChat._id));
-      if (chat) { chat.lastMessageAt = message.createdAt; chat._preview = previewFor(message); }
+      let chat = chats.find((c) => String(c._id) === String(activeChat._id));
+      
+      if (chat) { 
+        chat.lastMessageAt = message.createdAt; 
+        chat._preview = previewFor(message); 
+      } else {
+        activeChat.lastMessageAt = message.createdAt;
+        activeChat._preview = previewFor(message);
+        chats.push(activeChat); 
+      }
+      
       renderChatList();
     } catch (err) {
       toast(err.message);
