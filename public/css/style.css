@@ -576,15 +576,25 @@ select.destruct-select{
     transform-origin: bottom left;
 }
 
+
+.brand-text-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .brand-tagline {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 11px; 
   font-weight: 500;
   font-style: italic;
-  color: #6C8CFF; 
-  letter-spacing: 1.5px;
-  text-align: center; 
-  margin-top: -8px; 
-  margin-bottom: 24px; 
+  color: #6C8CFF;
+  letter-spacing: 0.5px;
+  margin-top: -4px; 
   opacity: 0.9;
+  text-align: left;
+}
+html[data-theme="light"] .brand-text-group .brand-tagline {
+  color: #3b5bdb; /* Thoda dark blue taaki white background par clear dikhe */
+  opacity: 1; 
 }
