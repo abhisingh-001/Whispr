@@ -116,6 +116,12 @@
 
       if (isOpenChat) {
         renderIfNew(msg, true);
+        
+        
+        if (!isMine) {
+          socket.emit('message:read', { chatId: msg.chat, messageId: msg.id || msg._id });
+        }
+
         if (!isMine && !msg.isSecure) {
           lastIncomingText = msg.content || '';
           renderSmartReplies();
@@ -352,7 +358,14 @@
 
     const container = document.getElementById('messages');
     container.innerHTML = '';
-    messages.forEach((m) => appendMessage(m, false));
+    messages.forEach((m) => {
+      appendMessage(m, false);
+      
+      const isMine = String(m.sender._id || m.sender) === String(me.id);
+      if (!isMine) {
+        socket.emit('message:read', { chatId: chat._id, messageId: m.id || m._id });
+      }
+    });
     container.scrollTop = container.scrollHeight;
 
     const lastIncoming = [...messages].reverse().find((m) => String(m.sender._id || m.sender) !== String(me.id) && !m.isSecure && !m.deleted);
