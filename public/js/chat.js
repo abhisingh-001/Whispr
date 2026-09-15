@@ -850,21 +850,43 @@
 
   async function renderUserSearch(query) {
     const q = query.trim().replace(/^@/, '');
-    const { users } = q ? await api(`/users/search?q=${encodeURIComponent(q)}`) : await api('/users/all');
-
     const list = document.getElementById('new-chat-list');
-    list.innerHTML = '';
+    
+    
+    list.innerHTML = ''; 
+
+    
+    if (q.length === 0) {
+      
+      list.innerHTML = '<div style="text-align: center; padding: 30px; color: #888; font-size: 14px;">Type a name or @username to search people...</div>';
+      return; 
+    }
+
+    
+    const { users } = await api(`/users/search?q=${encodeURIComponent(q)}`);
+
+    
+    if (users.length === 0) {
+      list.innerHTML = '<div style="text-align: center; padding: 30px; color: #888; font-size: 14px;">No users found</div>';
+      return;
+    }
+
+    
     users.forEach((u) => {
       const item = document.createElement('div');
       item.className = 'chat-item';
+      
       const avatar = document.createElement('div');
       avatar.className = 'avatar';
       paintAvatar(avatar, { name: u.fullName, color: u.avatarColor, image: u.avatarImage });
+      
       const meta = document.createElement('div');
       meta.className = 'chat-item-meta';
       meta.innerHTML = `<div class="name">${escapeHtml(u.fullName)}</div><div class="preview">@${escapeHtml(u.username)}</div>`;
+      
       item.appendChild(avatar);
       item.appendChild(meta);
+      
       item.addEventListener('click', async () => {
         const { chat } = await api('/chats/direct', { method: 'POST', body: JSON.stringify({ userId: u._id }) });
         if (!chats.find((c) => c._id === chat._id)) chats.unshift(chat);
