@@ -84,6 +84,7 @@
   document.getElementById('my-avatar').addEventListener('click', () => showOverlay('settings-overlay'));
 
   // ---------------- socket ----------------
+  
   function connectSocket() {
     socket = io({ auth: { token: getToken() } });
 
@@ -99,7 +100,7 @@
       const isOpenChat = activeChat && String(activeChat._id) === String(msg.chat);
 
       if (!chat) {
-        await loadChats(); // Backend se latest chats manga lo
+        await loadChats(); 
         chat = chats.find((c) => String(c._id) === String(msg.chat)); 
       }
 
@@ -107,9 +108,7 @@
         chat.lastMessageAt = msg.createdAt;
         chat._preview = previewFor(msg);
         if (msg.isSecure) chat.hasSecure = true;
-        // Naye chat par 1 unread badge lagao taaki wo clearly dikhe
         if (!isMine && !isOpenChat) chat._unread = (chat._unread || 0) + 1;
-        
         
         const searchInput = document.getElementById('chat-search');
         renderChatList(searchInput ? searchInput.value : '');
@@ -178,10 +177,25 @@
       typingChats.add(String(chatId));
       if (activeChat && String(activeChat._id) === String(chatId)) renderChatHeader();
     });
+    
     socket.on('typing:stop', ({ chatId }) => {
       typingChats.delete(String(chatId));
       if (activeChat && String(activeChat._id) === String(chatId)) renderChatHeader();
     });
+
+    // ================= PRO LEVEL BLUE TICK LISTENER =================
+    socket.on('message:read', ({ messageId }) => {
+      const row = document.querySelector(`[data-msg-id="${messageId}"]`);
+      if (row) {
+        const tickSpan = row.querySelector('.ticks');
+        if (tickSpan) {
+          tickSpan.innerHTML = '✓✓'; // Double tick
+          tickSpan.style.color = '#4da6ff'; // Blue color
+          tickSpan.style.letterSpacing = '-2px';
+        }
+      }
+    });
+    
   }
 
   function previewFor(msg) {
@@ -647,10 +661,21 @@
       textDiv.textContent = msg.content;
       bubble.appendChild(textDiv);
 
+      // ================= PRO LEVEL BLUE TICKS =================
       const meta = document.createElement('div');
       meta.className = 'meta';
-      meta.textContent = fmtTime(msg.createdAt);
+      
+      let ticksHTML = '';
+      if (mine) {
+        const isRead = msg.read || (msg.readBy && msg.readBy.length > 0); 
+        ticksHTML = isRead 
+          ? '<span class="ticks" style="color: #4da6ff; margin-left: 5px; font-weight: bold; letter-spacing: -2px;">✓✓</span>' 
+          : '<span class="ticks" style="color: #999; margin-left: 5px; font-weight: bold;">✓</span>';
+      }
+      
+      meta.innerHTML = `<span class="time">${fmtTime(msg.createdAt)}</span>${ticksHTML}`;
       bubble.appendChild(meta);
+      // ========================================================
 
       const translateBtn = document.createElement('button');
       translateBtn.className = 'translate-btn';
@@ -744,7 +769,6 @@
     });
   }
 
-  // ---------------- smart replies ----------------
   function renderSmartReplies() {
     const container = document.getElementById('smart-replies');
     container.innerHTML = '';
