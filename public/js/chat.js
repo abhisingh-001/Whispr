@@ -93,22 +93,26 @@
       if (activeChat) renderChatHeader();
     });
 
-    socket.on('message:new', (msg) => {
-      const chat = chats.find((c) => String(c._id) === String(msg.chat));
+    socket.on('message:new', async (msg) => {
+      let chat = chats.find((c) => String(c._id) === String(msg.chat));
       const isMine = String(msg.sender._id || msg.sender) === String(me.id);
       const isOpenChat = activeChat && String(activeChat._id) === String(msg.chat);
+
+      
+      if (!chat) {
+        await loadChats(); // Backend se latest chats manga lo
+        chat = chats.find((c) => String(c._id) === String(msg.chat)); // Ab naye chat ko list me dhundo
+      }
 
       if (chat) {
         chat.lastMessageAt = msg.createdAt;
         chat._preview = previewFor(msg);
         if (msg.isSecure) chat.hasSecure = true;
+        // Naye chat par 1 unread badge lagao taaki wo clearly dikhe
         if (!isMine && !isOpenChat) chat._unread = (chat._unread || 0) + 1;
-        renderChatList();
-      } else {
-        // Chat isn't in our local list - most likely we'd deleted/hidden
-        // it and this message just un-hid it server-side. Refresh the
-        // list so it reappears, WhatsApp-style, instead of only a toast.
-        loadChats();
+        
+        
+        renderChatList(document.getElementById('chat-search').value);
       }
 
       if (isOpenChat) {
