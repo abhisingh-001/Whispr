@@ -26,18 +26,49 @@
     document.getElementById('login-form').style.display = 'block';
   });
 
+  // 1. PAGE LOAD HOTE HI CHECK KARO KI KYA KOI PURANA USER HAI?
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedUser = JSON.parse(localStorage.getItem('whispr-last-user'));
+    
+    if (savedUser) {
+      // Username field me chup-chap purana naam daal do aur usko hide kar do
+      const identifierInput = document.getElementById('login-identifier');
+      identifierInput.value = savedUser.identifier;
+      identifierInput.parentElement.style.display = 'none'; // Username wala dabba gayab!
+
+      // Header ko change karke "Continue as User" bana do
+      const h1 = document.querySelector('#login-form h1');
+      if (h1) h1.innerHTML = `Welcome back, <br><span style="color: #667eea; font-size: 22px;">@${savedUser.identifier}</span>`;
+
+      // Subtitle ko 'Switch Account' ka button bana do
+      const sub = document.querySelector('#login-form .sub');
+      if (sub) {
+        sub.innerHTML = `<a href="#" onclick="localStorage.removeItem('whispr-last-user'); location.reload();" style="color: #aaa; text-decoration: underline; font-size: 13px; cursor: pointer;">Not @${savedUser.identifier}? Switch account</a>`;
+      }
+    }
+  });
+
+  
   document.getElementById('login-btn').addEventListener('click', async () => {
     clearError();
     const identifier = document.getElementById('login-identifier').value.trim();
     const password = document.getElementById('login-password').value;
-    if (!identifier || !password) return showError('Please fill in both fields.');
+    
+    if (!identifier || !password) return showError('Please fill in your password.');
 
     try {
       const data = await api('/auth/login', { method: 'POST', body: JSON.stringify({ identifier, password }) });
       setSession(data.token, data.user);
+      
+      
+      localStorage.setItem('whispr-last-user', JSON.stringify({
+        identifier: identifier,
+        name: data.user.fullName || data.user.username
+      }));
+
       window.location.href = '/chat.html';
     } catch (err) {
-      showError(err.message);
+      showError(err.message); // Agar password galat hua toh error dikhega
     }
   });
 
