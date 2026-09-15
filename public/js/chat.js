@@ -98,10 +98,9 @@
       const isMine = String(msg.sender._id || msg.sender) === String(me.id);
       const isOpenChat = activeChat && String(activeChat._id) === String(msg.chat);
 
-      
       if (!chat) {
         await loadChats(); // Backend se latest chats manga lo
-        chat = chats.find((c) => String(c._id) === String(msg.chat)); // Ab naye chat ko list me dhundo
+        chat = chats.find((c) => String(c._id) === String(msg.chat)); 
       }
 
       if (chat) {
@@ -112,7 +111,8 @@
         if (!isMine && !isOpenChat) chat._unread = (chat._unread || 0) + 1;
         
         
-        renderChatList(document.getElementById('chat-search').value);
+        const searchInput = document.getElementById('chat-search');
+        renderChatList(searchInput ? searchInput.value : '');
       }
 
       if (isOpenChat) {
