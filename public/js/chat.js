@@ -782,21 +782,48 @@
     });
   }
 
-  function renderSmartReplies() {
-    const container = document.getElementById('smart-replies');
-    container.innerHTML = '';
-    const suggestions = getSmartReplies(lastIncomingText);
-    suggestions.forEach((s) => {
-      const chip = document.createElement('button');
-      chip.className = 'smart-reply-chip';
-      chip.textContent = s;
-      chip.addEventListener('click', () => {
-        document.getElementById('message-input').value = s.replace(/^[^\w]+/, '').trim();
-        sendMessage();
-      });
-      container.appendChild(chip);
+const suggestionList = [
+  "I am good, thanks! 👍",
+  "How are you?",
+  "Talk to you later.",
+  "Sure, no problem.",
+  "Got it!",
+  "Can we talk right now?",
+  "That sounds great!",
+  "Okay, perfectly fine.",
+  "Yes, exactly.",
+  "Call me when you are free."
+];
+
+function renderSmartReplies() {
+  const container = document.getElementById('smart-replies');
+  if (!container) return;
+  
+  container.innerHTML = ''; 
+  
+  
+  const shuffled = [...suggestionList].sort(() => 0.5 - Math.random());
+  const selectedReplies = shuffled.slice(0, 3);
+  
+  // Har text ke liye naya button banao
+  selectedReplies.forEach((text) => {
+    const chip = document.createElement('button');
+    
+    chip.className = 'reply-pill'; 
+    chip.textContent = text;
+    
+    chip.addEventListener('click', () => {
+      const inputField = document.getElementById('message-input');
+      
+      inputField.value = text;
+      inputField.focus();
+      
+      
     });
-  }
+    
+    container.appendChild(chip);
+  });
+}
 
   // ---------------- composer ----------------
   const secureToggle = document.getElementById('secure-toggle');
@@ -1006,51 +1033,3 @@
 })();
 
 
-const suggestionList = [
-  "I am good, thanks! 👍",
-  "How are you?",
-  "Talk to you later.",
-  "Sure, no problem.",
-  "Got it!",
-  "Can we talk right now?",
-  "That sounds great!",
-  "Okay, perfectly fine.",
-  "Yes, exactly.",
-  "Call me when you are free."
-];
-
-
-function loadSmartReplies() {
-  const container = document.getElementById('smart-replies');
-  
-  
-  if (!container) return; 
-  
-  container.innerHTML = ''; 
-  
-  
-  const shuffled = [...suggestionList].sort(() => 0.5 - Math.random());
-  const selectedReplies = shuffled.slice(0, 3);
-  
-  
-  selectedReplies.forEach(text => {
-    const btn = document.createElement('button');
-    btn.className = 'reply-pill';
-    btn.innerText = text;
-    
-    
-    btn.onclick = () => {
-      
-      const inputField = document.getElementById('message-input'); 
-      if (inputField) {
-        inputField.value = text; 
-        inputField.focus();      
-      }
-    };
-    
-    container.appendChild(btn); 
-  });
-}
-
-
-loadSmartReplies();
