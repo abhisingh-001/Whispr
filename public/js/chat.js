@@ -805,20 +805,19 @@ function renderSmartReplies() {
   const shuffled = [...suggestionList].sort(() => 0.5 - Math.random());
   const selectedReplies = shuffled.slice(0, 3);
   
-  // Har text ke liye naya button banao
+  
   selectedReplies.forEach((text) => {
     const chip = document.createElement('button');
-    
     chip.className = 'reply-pill'; 
     chip.textContent = text;
     
+    
     chip.addEventListener('click', () => {
       const inputField = document.getElementById('message-input');
-      
-      inputField.value = text;
-      inputField.focus();
-      
-      
+      if (inputField) {
+        inputField.value = text; 
+        sendMessage();           
+      }
     });
     
     container.appendChild(chip);
@@ -1033,3 +1032,31 @@ function renderSmartReplies() {
 })();
 
 
+
+const emojiBtn = document.getElementById('emoji-btn');
+const pickerContainer = document.getElementById('emoji-picker-container');
+const emojiPicker = document.querySelector('emoji-picker');
+const msgInput = document.getElementById('message-input'); 
+
+if (emojiBtn && pickerContainer) {
+  emojiBtn.addEventListener('click', () => {
+    pickerContainer.classList.toggle('show');
+  });
+}
+
+
+if (emojiPicker && msgInput) {
+  emojiPicker.addEventListener('emoji-click', event => {
+    msgInput.value += event.detail.unicode; 
+    msgInput.focus(); 
+  });
+}
+
+
+document.addEventListener('click', (event) => {
+  if (emojiBtn && pickerContainer) {
+    if (!emojiBtn.contains(event.target) && !pickerContainer.contains(event.target)) {
+      pickerContainer.classList.remove('show');
+    }
+  }
+});

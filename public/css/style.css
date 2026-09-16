@@ -639,3 +639,35 @@ html[data-theme="dark"] .reply-pill {
 html[data-theme="dark"] .reply-pill:hover {
   background-color: #374151;
 }
+
+
+.emoji-toggle-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 8px; 
+  outline: none;
+  transition: transform 0.2s ease;
+}
+
+.emoji-toggle-btn:hover {
+  transform: scale(1.1);
+}
+
+
+#emoji-picker-container {
+  position: absolute;
+  bottom: 100%; 
+  left: 10px;
+  margin-bottom: 10px;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  display: none; 
+}
+
+
+#emoji-picker-container.show {
+  display: block;
+}

@@ -122,10 +122,21 @@
             <option value="300">Delete 5 min after unlock</option>
           </select>
         </div>
-        <div class="composer-row">
-          <textarea id="message-input" rows="1" placeholder="Type a message..."></textarea>
-          <button class="send-btn" id="send-btn">➤</button>
-        </div>
+          <div class="composer-row" style="position: relative;">
+            
+              <button id="emoji-btn" type="button" class="emoji-toggle-btn">😀</button>
+
+              
+              <textarea id="message-input" rows="1" placeholder="Type a message..."></textarea>
+              
+              
+              <button class="send-btn" id="send-btn">➤</button>
+
+              
+              <div id="emoji-picker-container" class="hidden-picker">
+                <emoji-picker></emoji-picker>
+            </div>
+          </div>
       </div>
     </div>
   </main>
@@ -435,5 +446,7 @@
 <script src="/js/analytics.js"></script>
 <script src="/js/chat.js"></script>
 <script src="/js/groupAdmin.js"></script>
+<!-- Emoji Picker Library -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 </body>
 </html>
