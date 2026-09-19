@@ -26,7 +26,8 @@ features layered on top to make it stand out.
 | 📌 **Pinned messages** | Pin any message (including a still-locked Secure Message) to a bar at the top of the chat — great for group announcements. |
 | 📊 **Chat Analytics** | A personal dashboard: messages sent/received, active chats, groups, and your most active day of the week. |
 | 🌐 **Message Translation** | One-click "Translate" on any message, powered by the free MyMemory translation API. Supports English, Hindi, Spanish, French, German, Bengali, Tamil, Telugu, Marathi, Arabic, Chinese, Japanese. |
-| 💡 **Smart Reply Suggestions** | Rule-based (no paid AI API needed) quick-reply chips based on the last message — e.g. a yes/no question suggests "👍 Yes" / "❌ No". |
+| 💡 **Smart Reply Suggestions** |💡 Dynamic Smart Replies: Randomized, 1-click text suggestion pills that auto-send instantly for faster communication (replaced old static buggy logic). |
+😀 WhatsApp-Style Emoji Keyboard: Integrated a fully functional, popup emoji-picker-element right inside the chat composer for an expressive typing experience.
 | ⌨️ **Typing indicator** | See when the other person is typing. |
 | 🏷️ **Unique usernames** | Instagram-style handle check while typing during sign-up — live "✓ available" / "✗ already taken" feedback, enforced again on the server. Case-insensitive, 3-20 chars, letters/numbers/underscore only, always shown with an `@` prefix. |
 | 🖼️ **Profile pictures** | Upload, preview, change or remove a real photo (resized/compressed client-side before upload). Falls back to the colored-initials avatar when none is set. Shown everywhere: sidebar, chat list, chat header, search results, group member lists. |
@@ -41,6 +42,7 @@ features layered on top to make it stand out.
 | 👑 **Group admin controls** | Rename the group, set a group picture, add/remove members, promote/demote admins, and toggle an "announcement-only" mode where only admins can post. |
 | 🔒 **Secure PIN Vault** | An optional, separately encrypted backup of your Secure Message PIN, unlockable only by re-entering your account password. See section 4. |
 | 🖼️ **Original logo & branding** | Custom SVG "speech-bubble + keyhole" logo — no third-party assets. |
+🚀 24/7 Zero-Delay Uptime: Integrated an automated UptimeRobot pinging mechanism (every 14 mins) to bypass Render's free-tier server sleep, ensuring the app loads instantly for every user.
 
 Footer on every screen: **© 2026 Whispr · Developed by Abhishek Singh**
 
